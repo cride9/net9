@@ -15,28 +15,24 @@ IChatClient chatClient =
         new OpenAIClientOptions { Endpoint = new Uri("https://api.deepseek.com") }
         ).AsIChatClient();
 
-IList<AITool> tools = new List<AITool>()
-{
-    new FileWrite(),
-    new FileRead()
-};
-
 AIAgent writer = new ChatClientAgent(
     chatClient,
     new ChatClientAgentOptions
     {
         Name = "Writer",
         Instructions = "A helpful assistant with equipped tools",
-        ChatOptions = new ChatOptions { 
-            AllowMultipleToolCalls = true, 
+        ChatOptions = new ChatOptions
+        {
+            AllowMultipleToolCalls = true,
             ToolMode = ChatToolMode.Auto,
-            Tools = tools
+            Tools = new List<AITool>() { new FileWrite(), new FileRead() }
         }
-    });
+    }
+    );
 
 await foreach (var chunk in writer.RunStreamingAsync("Write a short story about a haunted house. Filename : \"story.txt\""))
 {
-    Console.Write(chunk);
+    Console.Write(chunk.Text);
 }
 
 Console.ReadKey();
