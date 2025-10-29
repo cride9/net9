@@ -8,31 +8,51 @@ using OpenAI.Chat;
 
 using System.ClientModel;
 
-IChatClient chatClient =
+AIAgent fileWriterAgent = new ChatClientAgent(
     new ChatClient(
-        "deepseek-chat",
-        new ApiKeyCredential("sk-[REDACTED]"),
-        new OpenAIClientOptions { Endpoint = new Uri("https://api.deepseek.com") }
-        ).AsIChatClient();
-
-AIAgent writer = new ChatClientAgent(
-    chatClient,
+        "gpt-oss:20b",
+        new ApiKeyCredential("ollama"),
+        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:11434/v1") }
+        ).AsIChatClient(),
     new ChatClientAgentOptions
     {
         Name = "Writer",
-        Instructions = "A helpful assistant with equipped tools",
+        Instructions = Instructions.agentInstruction,
         ChatOptions = new ChatOptions
         {
             AllowMultipleToolCalls = true,
             ToolMode = ChatToolMode.Auto,
-            Tools = new List<AITool>() { new FileWrite(), new FileRead() }
-        }
+            Tools = new List<AITool>() { 
+                new FileWrite(), 
+                new FileRead(), 
+                new StopLoop() 
+            },
+        },
+        ChatMessageStoreFactory = context => new InMemoryChatMessageStore(),
     }
     );
 
-await foreach (var chunk in writer.RunStreamingAsync("Write a short story about a haunted house. Filename : \"story.txt\""))
+Console.Write("Task: ");
+var task = Console.ReadLine();
+if (string.IsNullOrWhiteSpace(task))
+{
+    Console.WriteLine("Bad task");
+    return;
+}
+
+AgentThread agentThread = fileWriterAgent.GetNewThread();
+await foreach (var chunk in fileWriterAgent.RunStreamingAsync(task, agentThread))
 {
     Console.Write(chunk.Text);
 }
 
-Console.ReadKey();
+Console.WriteLine();
+
+while (!StopLoop.StopExecution)
+{
+    await foreach (var chunk in fileWriterAgent.RunStreamingAsync(agentThread))
+    {
+        Console.Write(chunk.Text);
+    }
+    Console.WriteLine();
+}

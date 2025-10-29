@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.AI;
-
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace net9;
