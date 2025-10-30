@@ -57,7 +57,7 @@ public class FileRead : AIFunction
                 return $"Error: The file '{fileName}' was not found in the '{outputDirectory}' directory.";
             }
 
-            Console.WriteLine($"[TOOL CALL] Reading file: {fullPath}");
+            Console.WriteLine($"\n[TOOL CALL] Reading file: {fullPath}");
             string content = await File.ReadAllTextAsync(fullPath, cancellationToken);
 
             return content;
@@ -65,7 +65,7 @@ public class FileRead : AIFunction
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"[TOOL ERROR] Failed to read file: {ex.Message}");
+            Console.WriteLine($"\n[TOOL ERROR] Failed to read file: {ex.Message}");
             Console.ResetColor();
 
             return $"Error: Could not read the file. Reason: {ex.Message}";

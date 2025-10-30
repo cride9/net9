@@ -8,24 +8,44 @@ using OpenAI.Chat;
 
 using System.ClientModel;
 
-AIAgent fileWriterAgent = new ChatClientAgent(
-    new ChatClient(
-        "gpt-oss:20b",
-        new ApiKeyCredential("ollama"),
-        new OpenAIClientOptions { Endpoint = new Uri("http://localhost:11434/v1") }
-        ).AsIChatClient(),
+var chatClient = new ChatClient(
+        "deepseek-chat",
+        new ApiKeyCredential(Environment.GetEnvironmentVariable("DEEPSEEK")!),
+        new OpenAIClientOptions { Endpoint = new Uri("https://api.deepseek.com") }
+        ).AsIChatClient();
+
+AIAgent fileSummarizerAgent = new ChatClientAgent(
+    chatClient,
     new ChatClientAgentOptions
     {
-        Name = "Writer",
+        Name = "SummarizerAgent",
+        Instructions = "You are an agent that only does file summarizing. You'll be given a file, read with the tool and summarize it.",
+        ChatOptions = new ChatOptions
+        {
+            AllowMultipleToolCalls = false,
+            ToolMode = ChatToolMode.RequireSpecific("read_file"),
+            Tools = new List<AITool>
+            {
+                new FileRead()
+            }
+        }
+    }
+);
+
+AIAgent fileWriterAgent = new ChatClientAgent(
+    chatClient,
+    new ChatClientAgentOptions
+    {
+        Name = "GeneralAgent",
         Instructions = Instructions.agentInstruction,
         ChatOptions = new ChatOptions
         {
             AllowMultipleToolCalls = true,
             ToolMode = ChatToolMode.Auto,
-            Tools = new List<AITool>() { 
+            Tools = new List<AITool> { 
                 new FileWrite(), 
-                new FileRead(), 
-                new StopLoop() 
+                new StopLoop(),
+                fileSummarizerAgent.AsAIFunction()
             },
         },
         ChatMessageStoreFactory = context => new InMemoryChatMessageStore(),

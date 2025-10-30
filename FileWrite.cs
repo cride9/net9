@@ -68,13 +68,13 @@ public class FileWrite : AIFunction
 
             if (append)
             {
-                Console.WriteLine($"[TOOL CALL] Appending to file: {fileName}");
+                Console.WriteLine($"\n[TOOL CALL] Appending to file: {fileName}");
                 await File.AppendAllTextAsync(fileName, content, cancellationToken);
                 return $"Success: Content appended to {fileName}.";
             }
             else
             {
-                Console.WriteLine($"[TOOL CALL] Writing to file: {fileName}");
+                Console.WriteLine($"\n[TOOL CALL] Writing to file: {fileName}");
                 await File.WriteAllTextAsync(fileName, content, cancellationToken);
                 return $"Success: File '{fileName}' created/overwritten.";
             }
@@ -82,7 +82,7 @@ public class FileWrite : AIFunction
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"[TOOL ERROR] Failed to write file: {ex.Message}");
+            Console.WriteLine($"\n[TOOL ERROR] Failed to write file: {ex.Message}");
             Console.ResetColor();
 
             return $"Error: Could not write to the file. Reason: {ex.Message}";
