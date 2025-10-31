@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.AI;
+
 using System.Text.Json;
 
-namespace net9;
+namespace net9.tools;
 
 public class StopLoop : AIFunction
 {
@@ -26,7 +27,7 @@ public class StopLoop : AIFunction
         CancellationToken cancellationToken)
     {
 
-        StopExecution = (arguments.GetValueOrDefault("stop") is JsonElement stopTemp) ? stopTemp.GetBoolean() : false;
+        StopExecution = arguments.GetValueOrDefault("stop") is JsonElement stopTemp ? stopTemp.GetBoolean() : false;
         return StopExecution ? "Execution stopping..." : "Continuing execution...";
     }
 }

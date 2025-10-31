@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.AI;
+
 using System.Text.Json;
 
-namespace net9;
+namespace net9.tools;
 public class FileWrite : AIFunction
 {
     public override string Name => "write_file";
@@ -35,10 +36,10 @@ public class FileWrite : AIFunction
         CancellationToken cancellationToken)
     {
         // 2. Cast to JsonElement and then get the primitive value
-        string? name = (arguments.GetValueOrDefault("name") is JsonElement nameElem) ? nameElem.GetString() : null;
-        string? extension = (arguments.GetValueOrDefault("extension") is JsonElement extElem) ? extElem.GetString() : null;
-        string? content = (arguments.GetValueOrDefault("content") is JsonElement contentElem) ? contentElem.GetString() : null;
-        bool append = (arguments.GetValueOrDefault("append") is JsonElement appendElem) ? appendElem.GetBoolean() : false;
+        string? name = arguments.GetValueOrDefault("name") is JsonElement nameElem ? nameElem.GetString() : null;
+        string? extension = arguments.GetValueOrDefault("extension") is JsonElement extElem ? extElem.GetString() : null;
+        string? content = arguments.GetValueOrDefault("content") is JsonElement contentElem ? contentElem.GetString() : null;
+        bool append = arguments.GetValueOrDefault("append") is JsonElement appendElem ? appendElem.GetBoolean() : false;
 
         // 2. Validate the inputs
         if (string.IsNullOrWhiteSpace(name))

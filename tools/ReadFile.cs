@@ -2,7 +2,7 @@
 
 using System.Text.Json;
 
-namespace net9;
+namespace net9.tools;
 public class FileRead : AIFunction
 {
     public override string Name => "read_file";
@@ -29,8 +29,8 @@ public class FileRead : AIFunction
         CancellationToken cancellationToken)
     {
        
-        string? name = (arguments.GetValueOrDefault("name") is JsonElement nameElem) ? nameElem.GetString() : null;
-        string? extension = (arguments.GetValueOrDefault("extension") is JsonElement extensionElem) ? extensionElem.GetString() : null;
+        string? name = arguments.GetValueOrDefault("name") is JsonElement nameElem ? nameElem.GetString() : null;
+        string? extension = arguments.GetValueOrDefault("extension") is JsonElement extensionElem ? extensionElem.GetString() : null;
 
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(extension))
         {
