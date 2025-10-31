@@ -8,7 +8,6 @@ using OpenAI;
 using OpenAI.Chat;
 
 using System.ClientModel;
-using System.Runtime.Serialization.Json;
 
 var chatClient = new ChatClient(
         "deepseek-chat",

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 
-using net9.tools;
-
 namespace net9.agents;
 public class FileSummariseAgent : AgentTemplate
 {
