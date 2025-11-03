@@ -1,5 +1,6 @@
 ﻿using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging;
 
 namespace net9.agents;
 public class GeneralAgent : AgentTemplate
@@ -16,8 +17,8 @@ public class GeneralAgent : AgentTemplate
                 {
                     AllowMultipleToolCalls = true,
                     ToolMode = ChatToolMode.Auto,
-                    Tools = tools
-                }
+                    Tools = tools,
+                },
             }
         );
     }
