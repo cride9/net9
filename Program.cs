@@ -23,7 +23,7 @@ var fileSumAgent = new FileSummariseAgent(chatClient,
     new List<AITool> { new FileRead() });
 
 var generalAgent = new GeneralAgent(chatClient, 
-    new List<AITool> { new FileWrite(), new StopLoop(), fileSumAgent.AsAIFunction() });
+    new List<AITool> { new FileWrite(), new StopLoop(), fileSumAgent.AsAIFunction(), new FileRead(), new ListDirectory() });
 
 // Task bekérése
 Console.Write("Task: ");
