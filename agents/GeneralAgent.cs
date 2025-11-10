@@ -17,7 +17,7 @@ public class GeneralAgent : AgentTemplate
                 {
                     AllowMultipleToolCalls = true,
                     ToolMode = ChatToolMode.Auto,
-                    Tools = tools,
+                    Tools = tools
                 },
             }
         );

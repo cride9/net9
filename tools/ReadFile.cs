@@ -28,7 +28,6 @@ public class FileRead : AIFunction
         AIFunctionArguments arguments,
         CancellationToken cancellationToken)
     {
-       
         string? name = arguments.GetValueOrDefault("name") is JsonElement nameElem ? nameElem.GetString() : null;
         string? extension = arguments.GetValueOrDefault("extension") is JsonElement extensionElem ? extensionElem.GetString() : null;
 

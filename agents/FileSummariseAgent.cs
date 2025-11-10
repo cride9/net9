@@ -10,11 +10,11 @@ public class FileSummariseAgent : AgentTemplate
             client,
             new ChatClientAgentOptions
             {
-                Name = "SummarizerAgent",
-                Instructions = "You are an agent that only does file summarizing. You'll be given a file, read with the tool and summarize it.",
+                Name = "FileSummarizer",
+                Instructions = "You are an agent that only does file summarizing. You'll be given a file or files, read with the tool and summarize them. If it's a programming code use specification summary",
                 ChatOptions = new ChatOptions
                 {
-                    AllowMultipleToolCalls = false,
+                    AllowMultipleToolCalls = true,
                     ToolMode = ChatToolMode.RequireSpecific("read_file"),
                     Tools = tools
                 }
